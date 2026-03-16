@@ -1,0 +1,36 @@
+{
+  "name": "sila-movies-app",
+  "version": "1.0.0",
+  "description": "SILA MOVIES - Premium Movie Streaming App 2026",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 3000",
+    "dev": "npx live-server --port=3000",
+    "build": "echo 'No build needed'",
+    "deploy": "gh-pages -d ."
+  },
+  "keywords": [
+    "movies",
+    "streaming",
+    "netflix-clone",
+    "sila-movies",
+    "react",
+    "expo"
+  ],
+  "author": "Sawa Rich",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.2",
+    "localstorage-polyfill": "^1.0.1"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2",
+    "gh-pages": "^6.1.0"
+  },
+  "homepage": "https://sila-movies.netlify.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sawarich/sila-movies"
+  }
+}
