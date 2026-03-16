@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SILA MOVIES 2026 - Premium</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+
+        :root {
+            --primary: #0066FF;
+            --bg: #0A0F1E;
+            --card: #1A1F2E;
+            --text: #FFFFFF;
+            --text-secondary: #8899AA;
+            --border: #2A2F3E;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* Splash Screen */
+        #splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--bg), #000);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: 0.5s;
+        }
+
+        .splash-logo {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        .splash-text {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Main App */
+        #app {
+            display: none;
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg);
+            padding: 15px;
+            padding-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .logo {
+            color: var(--primary);
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .header-icons span {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: var(--card);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid var(--border);
+            z-index: 100;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 24px;
+        }
+
+        .nav-text {
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        /* Main Content */
+        .container {
+            padding: 100px 15px 70px;
+            min-height: 100vh;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0 10px;
+            color: var(--text);
+        }
+
+        /* Movie Scroll */
+        .movie-row {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 5px 0;
+            scrollbar-width: none;
+        }
+
+        .movie-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .movie-card {
+            min-width: 120px;
+            cursor: pointer;
+        }
+
+        .movie-poster {
+            width: 120px;
+            height: 180px;
+            background: var(--card);
+            border-radius: 8px;
+            margin-bottom: 5px;
+            background-size: cover;
+            background-position: center;
+            transition: 0.3s;
+        }
+
+        .movie-card:hover .movie-poster {
+            transform: scale(1.05);
+        }
+
+        .movie-title {
+            font-size: 14px;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+
+        .movie-year {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Movie Detail */
+        .detail-backdrop {
+            width: 100%;
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .backdrop-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(transparent, var(--bg));
+        }
+
+        .back-button {
+            position: absolute;
+            top: 40px;
+            left: 15px;
+            background: rgba(0,0,0,0.5);
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .detail-content {
+            padding: 20px 15px;
+            margin-top: -50px;
+        }
+
+        .detail-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .detail-meta {
+            display: flex;
+            gap: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .genre-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .genre-tag {
+            background: var(--card);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .play-btn, .download-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .play-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .download-btn {
+            background: var(--card);
+            color: white;
+        }
+
+        /* Search Page */
+        .search-box {
+            background: var(--card);
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .search-box input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            margin-left: 10px;
+            outline: none;
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            overflow-x: auto;
+            padding: 5px 0;
+        }
+
+        .filter-chip {
+            background: var(--card);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .filter-chip.active {
+            background: var(--primary);
+        }
+
+        .search-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .search-item {
+            cursor: pointer;
+        }
+
+        .search-item img {
+            width: 100%;
+            height: 200px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .search-item .title {
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        /* Live TV */
+        .channel-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .channel-card {
+            background: var(--card);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .channel-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 40px;
+            margin: 0 auto 10px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        .channel-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .live-badge {
+            background: #FF0000;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        /* AI Chat */
+        .chat-container {
+            padding: 15px;
+            height: calc(100vh - 180px);
+            overflow-y: auto;
+        }
+
+        .chat-message {
+            max-width: 80%;
+            padding: 12px;
+            border-radius: 16px;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background: var(--primary);
+            margin-left: auto;
+        }
+
+        .ai-message {
+            background: var(--card);
+        }
+
+        .chat-input-area {
+            position: fixed;
+            bottom: 70px;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            background: var(--card);
+            display: flex;
+            gap: 10px;
+            z-index: 99;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: var(--bg);
+            border: none;
+            padding: 12px;
+            border-radius: 20px;
+            color: white;
+            outline: none;
+        }
+
+        .send-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 12px;
+            background: var(--card);
+            border-radius: 16px;
+            width: fit-content;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--text-secondary);
+            border-radius: 4px;
+            animation: typing 1s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Video Player Modal */
+        .video-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: black;
+            z-index: 1000;
+            display: none;
+        }
+
+        .video-modal.show {
+            display: block;
+        }
+
+        .video-player {
+            width: 100%;
+            height: 100%;
+        }
+
+        .close-video {
+            position: absolute;
+            top: 40px;
+            right: 20px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div id="splash">
+        <div class="splash-logo">SILA MOVIES</div>
+        <div class="splash-text">Stream Movies & Live TV</div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">SILA MOVIES</div>
+            <div class="header-icons">
+                <span onclick="showPage('search')">🔍</span>
+                <span onclick="showPage('profile')">👤</span>
+            </div>
+        </div>
+
+        <!-- Pages -->
+        <div id="home-page" class="container">
+            <div class="section-title">🔥 TRENDING NOW</div>
+            <div class="movie-row" id="trending-movies"></div>
+            
+            <div class="section-title">🆕 NEW RELEASES 2024</div>
+            <div class="movie-row" id="new-movies"></div>
+            
+            <div class="section-title">⭐ POPULAR THIS WEEK</div>
+            <div class="movie-row" id="popular-movies"></div>
+            
+            <div class="section-title">📺 LIVE TV CHANNELS</div>
+            <div class="movie-row" id="live-channels"></div>
+            
+            <div class="section-title">🎬 ACTION MOVIES</div>
+            <div class="movie-row" id="action-movies"></div>
+            
+            <div class="section-title">😄 COMEDY</div>
+            <div class="movie-row" id="comedy-movies"></div>
+        </div>
+
+        <div id="movie-detail-page" class="hidden">
+            <div class="detail-backdrop" id="detail-backdrop">
+                <div class="backdrop-overlay"></div>
+                <div class="back-button" onclick="showPage('home')">←</div>
+            </div>
+            <div class="detail-content">
+                <div class="detail-title" id="detail-title"></div>
+                <div class="detail-meta" id="detail-meta"></div>
+                <div class="genre-tags" id="detail-genres"></div>
+                <div class="description" id="detail-description"></div>
+                <div class="action-buttons">
+                    <button class="play-btn" onclick="playMovie()">▶ PLAY NOW</button>
+                    <button class="download-btn" onclick="downloadMovie()">⬇ DOWNLOAD</button>
+                </div>
+                <div class="section-title">🔥 YOU MAY ALSO LIKE</div>
+                <div class="movie-row" id="related-movies"></div>
+            </div>
+        </div>
+
+        <div id="search-page" class="container hidden">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Search 50+ movies..." id="search-input" onkeyup="searchMovies()">
+            </div>
+            <div class="search-filters">
+                <span class="filter-chip active" onclick="filterMovies('all')">All</span>
+                <span class="filter-chip" onclick="filterMovies('Action')">Action</span>
+                <span class="filter-chip" onclick="filterMovies('Comedy')">Comedy</span>
+                <span class="filter-chip" onclick="filterMovies('Drama')">Drama</span>
+                <span class="filter-chip" onclick="filterMovies('Sci-Fi')">Sci-Fi</span>
+                <span class="filter-chip" onclick="filterMovies('Horror')">Horror</span>
+            </div>
+            <div class="search-grid" id="search-results"></div>
+        </div>
+
+        <div id="live-tv-page" class="container hidden">
+            <div class="section-title">📺 LIVE TV CHANNELS</div>
+            <div class="channel-grid" id="channels-grid"></div>
+        </div>
+
+        <div id="chat-page" class="hidden">
+            <div class="chat-container" id="chat-messages"></div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chat-input" placeholder="Ask AI about movies..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <button class="send-btn" onclick="sendMessage()">➤</button>
+            </div>
+        </div>
+
+        <div id="profile-page" class="container hidden">
+            <div style="text-align: center; margin-top: 50px;">
+                <div style="font-size: 80px; color: var(--primary);">👤</div>
+                <h2>Guest User</h2>
+                <p style="color: var(--text-secondary);">Free Plan • 50+ Movies</p>
+                
+                <div style="display: flex; justify-content: space-around; margin: 30px 0;">
+                    <div>
+                        <div style="font-size: 24px; color: var(--primary);" id="total-movies">50</div>
+                        <div style="color: var(--text-secondary);">Movies</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 24px; color: var(--primary);" id="total-channels">12</div>
+                        <div style="color: var(--text-secondary);">Live TV</div>
+                    </div>
+                </div>
+                
+                <button onclick="upgradePremium()" style="background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; margin: 10px 0; cursor: pointer;">⭐ UPGRADE TO PREMIUM</button>
+                <button onclick="clearCache()" style="background: var(--card); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer;">🗑 CLEAR CACHE</button>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="showPage('home')">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-text">Home</div>
+            </div>
+            <div class="nav-item" onclick="showPage('search')">
+                <div class="nav-icon">🔍</div>
+                <div class="nav-text">Search</div>
+            </div>
+            <div class="nav-item" onclick="showPage('live')">
+                <div class="nav-icon">📺</div>
+                <div class="nav-text">Live TV</div>
+            </div>
+            <div class="nav-item" onclick="showPage('chat')">
+                <div class="nav-icon">💬</div>
+                <div class="nav-text">AI</div>
+            </div>
+            <div class="nav-item" onclick="showPage('profile')">
+                <div class="nav-icon">👤</div>
+                <div class="nav-text">Profile</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Player Modal -->
+    <div id="videoModal" class="video-modal">
+        <span class="close-video" onclick="closeVideo()">✕</span>
+        <video id="videoPlayer" class="video-player" controls autoplay></video>
+    </div>
+
+    <script>
+        // ==================== DATABASE YA MOVIES 50+ ====================
+        const movies = [
+            // ACTION MOVIES (1-15)
+            {
+                id: 1,
+                title: "Fast & Furious 10",
+                poster: "https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg",
+                backdrop: "https://image.tmdb.org/t/p/original/4XM8DUTQb3lhLemJC51Jx4a2EuA.jpg",
+                year: 2024,
+                rating: 7.8,
+                genre: ["Action", "Thriller"],
+                description: "The final chapter of the Fast & Furious saga. Dom Toretto and his family must face their most terrifying opponent yet.",
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                downloadUrl: "https://drive.google.com/file/d/1IyyDGATtjaE6z5yncmBNf0_V2UoicVZO/view",
+                type: "movie"
+            },
+            {
+                id: 2,
+                title: "Mission Impossible 8",
+                poster: "https://image.tmdb.org/t/p/w500/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                backdrop: "https://image.tmdb.org/t/p/original/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                year: 2024,
+                rating: 8.2,
+                genre: ["Action", "Adventure"],
+                description: "Ethan Hunt and his IMF team embark on their most dangerous mission yet.",
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+                downloadUrl: "https://drive.google.com/file/d/1IyyDGATtjaE6z5yncmBNf0_V2UoicVZO/view"
+            },
+            {
+                id: 3,
+                title: "John Wick 5",
+                poster: "https://image.tmdb.org/t/p/w500/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                backdrop: "https://image.tmdb.org/t/p/original/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                year: 2024,
+                rating: 8.5,
+                genre: ["Action", "Thriller"],
+                description: "John Wick returns for vengeance against the High Table.",
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                downloadUrl: "https://drive.google.com/file/d/1IyyDGATtjaE6z5yncmBNf0_V2UoicVZO/view"
+            },
+            {
+                id: 4,
+                title: "The Batman 2",
+                poster: "https://image.tmdb.org/t/p/w500/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                backdrop: "https://image.tmdb.org/t/p/original/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                year: 2024,
+                rating: 8.0,
+                genre: ["Action", "Crime"],
+                description: "The Dark Knight returns to face new villains in Gotham.",
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+                downloadUrl: "https://drive.google.com/file/d/1IyyDGATtjaE6z5yncmBNf0_V2UoicVZO/view"
+            },
+            {
+                id: 5,
+                title: "Deadpool 3",
+                poster: "https://image.tmdb.org/t/p/w500/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                backdrop: "https://image.tmdb.org/t/p/original/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                year: 2024,
+                rating: 8.7,
+                genre: ["Action", "Comedy"],
+                description: "Deadpool joins the MCU with Wolverine by his side.",
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+                downloadUrl: "https://drive.google.com/file/d/1IyyDGATtjaE6z5yncmBNf0_V2UoicVZO/view"
+            },
+            // DRAMA MOVIES (16-25)
+            {
+                id: 6,
+                title: "Oppenheimer",
+                poster: "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
+                backdrop: "https://image.tmdb.org/t/p/original/fm6KqXpk3M2HVveHwCrBSSBaO0V.jpg",
+                year: 2023,
+                rating: 8.5,
+                genre: ["Drama", "History"],
+                description: "The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb.",
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+                downloadUrl: "https://drive.google.com/file/d/1IyyDGATtjaE6z5yncmBNf0_V2UoicVZO/view"
+            },
+            {
+                id: 7,
+                title: "Killers of the Flower Moon",
+                poster: "https://image.tmdb.org/t/p/w500/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                backdrop: "https://image.tmdb.org/t/p/original/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                year: 2023,
+                rating: 8.3,
+                genre: ["Drama", "Crime"],
+                description: "Members of the Osage tribe are murdered under mysterious circumstances.",
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                downloadUrl: "https://drive.google.com/file/d/1IyyDGATtjaE6z5yncmBNf0_V2UoicVZO/view"
+            },
+            // COMEDY MOVIES (26-35)
+            {
+                id: 8,
+                title: "Barbie",
+                poster: "https://image.tmdb.org/t/p/w500/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                backdrop: "https://image.tmdb.org/t/p/original/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                year: 2023,
+                rating: 7.5,
+                genre: ["Comedy", "Adventure"],
+                description: "Barbie suffers a crisis that leads her to question her world and her existence.",
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+                downloadUrl: "https://drive.google.com/file/d/1IyyDGATtjaE6z5yncmBNf0_V2UoicVZO/view"
+            },
+            {
+                id: 9,
+                title: "No Hard Feelings",
+                poster: "https://image.tmdb.org/t/p/w500/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                backdrop: "https://image.tmdb.org/t/p/original/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                year: 2023,
+                rating: 7.2,
+                genre: ["Comedy", "Romance"],
+                description: "A woman answers an ad to date a wealthy couple's introverted son.",
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+                downloadUrl: "https://drive.google.com/file/d/1IyyDGATtjaE6z5yncmBNf0_V2UoicVZO/view"
+            },
+            // SCI-FI MOVIES (36-45)
+            {
+                id: 10,
+                title: "Dune: Part Two",
+                poster: "https://image.tmdb.org/t/p/w500/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                backdrop: "https://image.tmdb.org/t/p/original/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                year: 2024,
+                rating: 8.9,
+                genre: ["Sci-Fi", "Adventure"],
+                description: "Paul Atreides unites with the Fremen to seek revenge against those who destroyed his family.",
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                downloadUrl: "https://drive.google.com/file/d/1IyyDGATtjaE6z5yncmBNf0_V2UoicVZO/view"
+            },
+            {
+                id: 11,
+                title: "The Creator",
+                poster: "https://image.tmdb.org/t/p/w500/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                backdrop: "https://image.tmdb.org/t/p/original/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                year: 2023,
+                rating: 7.8,
+                genre: ["Sci-Fi", "Action"],
+                description: "A future where humans battle AI, a soldier discovers a weapon that could end the war.",
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+                downloadUrl: "https://drive.google.com/file/d/1IyyDGATtjaE6z5yncmBNf0_V2UoicVZO/view"
+            },
+            // HORROR MOVIES (46-50)
+            {
+                id: 12,
+                title: "The Nun 2",
+                poster: "https://image.tmdb.org/t/p/w500/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                backdrop: "https://image.tmdb.org/t/p/original/5qvg5VqTkF2Rz7QqQqQqQqQqQqQ.jpg",
+                year: 2023,
+                rating: 6.9,
+                genre: ["Horror", "Thriller"],
+                description: "The demon nun returns to terrorize a French boarding school.",
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                downloadUrl: "https://drive.google.com/file/d/1IyyDGATtjaE6z5yncmBNf0_V2UoicVZO/view"
+            }
+        ];
+
+        // Add more movies to reach 50
+        for (let i = 13; i <= 50; i++) {
+            movies.push({
+                id: i,
+                title: `SILA Movie ${i}`,
+                poster: "https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg",
+                backdrop: "https://image.tmdb.org/t/p/original/4XM8DUTQb3lhLemJC51Jx4a2EuA.jpg",
+                year: 2023 + (i % 2),
+                rating: (7 + (i % 3)).toFixed(1),
+                genre: i % 4 === 0 ? ["Action"] : i % 3 === 0 ? ["Comedy"] : ["Drama"],
+                description: `This is SILA Movie ${i}. Enjoy watching!`,
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                downloadUrl: "https://drive.google.com/file/d/1IyyDGATtjaE6z5yncmBNf0_V2UoicVZO/view"
+            });
+        }
+
+        // ==================== LIVE TV CHANNELS ZA BURE ====================
+        const liveChannels = [
+            {
+                id: 1,
+                name: "SILA TV",
+                logo: "📺",
+                streamUrl: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                category: "Entertainment",
+                status: "live"
+            },
+            {
+                id: 2,
+                name: "24/7 Movies",
+                logo: "🎬",
+                streamUrl: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                category: "Movies",
+                status: "live"
+            },
+            {
+                id: 3,
+                name: "Sports 24",
+                logo: "⚽",
+                streamUrl: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                category: "Sports",
+                status: "live"
+            },
+            {
+                id: 4,
+                name: "News Network",
+                logo: "📰",
+                streamUrl: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                category: "News",
+                status: "live"
+            },
+            {
+                id: 5,
+                name: "Music TV",
+                logo: "🎵",
+                streamUrl: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                category: "Music",
+                status: "live"
+            },
+            {
+                id: 6,
+                name: "Cartoon Zone",
+                logo: "🐭",
+                streamUrl: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                category: "Kids",
+                status: "live"
+            },
+            {
+                id: 7,
+                name: "Action Max",
+                logo: "💥",
+                streamUrl: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                category: "Action",
+                status: "live"
+            },
+            {
+                id: 8,
+                name: "Comedy Central",
+                logo: "😂",
+                streamUrl: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                category: "Comedy",
+                status: "live"
+            },
+            {
+                id: 9,
+                name: "Documentary",
+                logo: "📽️",
+                streamUrl: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                category: "Education",
+                status: "live"
+            },
+            {
+                id: 10,
+                name: "Fashion TV",
+                logo: "👗",
+                streamUrl: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                category: "Lifestyle",
+                status: "live"
+            },
+            {
+                id: 11,
+                name: "Tech Talks",
+                logo: "💻",
+                streamUrl: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                category: "Technology",
+                status: "live"
+            },
+            {
+                id: 12,
+                name: "Travel World",
+                logo: "✈️",
+                streamUrl: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                category: "Travel",
+                status: "live"
+            }
+        ];
+
+        // ==================== APP STATE ====================
+        let currentMovie = null;
+        let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
+        let currentFilter = 'all';
+        let deviceId = localStorage.getItem('deviceId') || 'device_' + Math.random().toString(36).substr(2, 9);
+
+        // ==================== SPLASH SCREEN ====================
+        setTimeout(() => {
+            document.getElementById('splash').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('splash').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('app').style.opacity = '1';
+                }, 50);
+            }, 500);
+        }, 2000);
+
+        // ==================== PAGE NAVIGATION ====================
+        function showPage(page) {
+            // Hide all pages
+            document.getElementById('home-page').classList.add('hidden');
+            document.getElementById('movie-detail-page').classList.add('hidden');
+            document.getElementById('search-page').classList.add('hidden');
+            document.getElementById('live-tv-page').classList.add('hidden');
+            document.getElementById('chat-page').classList.add('hidden');
+            document.getElementById('profile-page').classList.add('hidden');
+            
+            // Show selected page
+            if (page === 'home') {
+                document.getElementById('home-page').classList.remove('hidden');
+                loadHomePage();
+            } else if (page === 'movie') {
+                document.getElementById('movie-detail-page').classList.remove('hidden');
+            } else if (page === 'search') {
+                document.getElementById('search-page').classList.remove('hidden');
+                document.getElementById('search-input').focus();
+                searchMovies();
+            } else if (page === 'live') {
+                document.getElementById('live-tv-page').classList.remove('hidden');
+                loadLiveTV();
+            } else if (page === 'chat') {
+                document.getElementById('chat-page').classList.remove('hidden');
+                loadChatHistory();
+            } else if (page === 'profile') {
+                document.getElementById('profile-page').classList.remove('hidden');
+            }
+            
+            // Update bottom nav
+            document.querySelectorAll('.nav-item').forEach((item) => {
+                item.classList.remove('active');
+            });
+            const navItems = document.querySelectorAll('.nav-item');
+            if (page === 'home') navItems[0].classList.add('active');
+            if (page === 'search') navItems[1].classList.add('active');
+            if (page === 'live') navItems[2].classList.add('active');
+            if (page === 'chat') navItems[3].classList.add('active');
+            if (page === 'profile') navItems[4].classList.add('active');
+        }
+
+        // ==================== LOAD HOME PAGE ====================
+        function loadHomePage() {
+            // Trending (first 10 movies)
+            document.getElementById('trending-movies').innerHTML = generateMovieRow(movies.slice(0, 10));
+            
+            // New releases (latest 10)
+            document.getElementById('new-movies').innerHTML = generateMovieRow(movies.slice(10, 20));
+            
+            // Popular (highest rated)
+            const popular = [...movies].sort((a, b) => b.rating - a.rating).slice(0, 10);
+            document.getElementById('popular-movies').innerHTML = generateMovieRow(popular);
+            
+            // Live TV channels
+            document.getElementById('live-channels').innerHTML = generateChannelRow(liveChannels.slice(0, 10));
+            
+            // Action movies
+            const action = movies.filter(m => m.genre.includes('Action')).slice(0, 10);
+            document.getElementById('action-movies').innerHTML = generateMovieRow(action);
+            
+            // Comedy movies
+            const comedy = movies.filter(m => m.genre.includes('Comedy')).slice(0, 10);
+            document.getElementById('comedy-movies').innerHTML = generateMovieRow(comedy);
+        }
+
+        function generateMovieRow(movieList) {
+            return movieList.map(movie => `
+                <div class="movie-card" onclick="showMovieDetail(${movie.id})">
+                    <div class="movie-poster" style="background-image: url('${movie.poster}')"></div>
+                    <div class="movie-title">${movie.title}</div>
+                    <div class="movie-year">${movie.year} • ⭐ ${movie.rating}</div>
+                </div>
+            `).join('');
+        }
+
+        function generateChannelRow(channelList) {
+            return channelList.map(channel => `
+                <div class="movie-card" onclick="playLiveChannel('${channel.streamUrl}', '${channel.name}')">
+                    <div class="movie-poster" style="background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 40px;">${channel.logo}</div>
+                    <div class="movie-title">${channel.name}</div>
+                    <div class="movie-year" style="color: #FF0000;">🔴 LIVE</div>
+                </div>
+            `).join('');
+        }
+
+        // ==================== MOVIE DETAIL ====================
+        function showMovieDetail(id) {
+            currentMovie = movies.find(m => m.id === id);
+            
+            document.getElementById('detail-backdrop').style.backgroundImage = `url('${currentMovie.backdrop}')`;
+            document.getElementById('detail-title').innerHTML = currentMovie.title;
+            document.getElementById('detail-meta').innerHTML = `${currentMovie.year} • ⭐ ${currentMovie.rating}/10 • 2h 15min`;
+            
+            let genresHtml = '';
+            currentMovie.genre.forEach(g => {
+                genresHtml += `<span class="genre-tag">${g}</span>`;
+            });
+            document.getElementById('detail-genres').innerHTML = genresHtml;
+            document.getElementById('detail-description').innerHTML = currentMovie.description;
+            
+            // Related movies
+            const related = movies.filter(m => 
+                m.id !== currentMovie.id && 
+                m.genre.some(g => currentMovie.genre.includes(g))
+            ).slice(0, 10);
+            document.getElementById('related-movies').innerHTML = generateMovieRow(related);
+            
+            showPage('movie');
+        }
+
+        // ==================== PLAY MOVIE ====================
+        function playMovie() {
+            if (currentMovie && currentMovie.videoUrl) {
+                const videoModal = document.getElementById('videoModal');
+                const videoPlayer = document.getElementById('videoPlayer');
+                videoPlayer.src = currentMovie.videoUrl;
+                videoModal.classList.add('show');
+                videoPlayer.play();
+            }
+        }
+
+        function playLiveChannel(url, name) {
+            const videoModal = document.getElementById('videoModal');
+            const videoPlayer = document.getElementById('videoPlayer');
+            videoPlayer.src = url;
+            videoModal.classList.add('show');
+            videoPlayer.play();
+        }
+
+        function closeVideo() {
+            const videoModal = document.getElementById('videoModal');
+            const videoPlayer = document.getElementById('videoPlayer');
+            videoPlayer.pause();
+            videoPlayer.src = '';
+            videoModal.classList.remove('show');
+        }
+
+        // ==================== DOWNLOAD MOVIE ====================
+        function downloadMovie() {
+            if (currentMovie && currentMovie.downloadUrl) {
+                window.open(currentMovie.downloadUrl, '_blank');
+            } else {
+                alert('Download link not available');
+            }
+        }
+
+        // ==================== SEARCH ====================
+        function searchMovies() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            let results = movies;
+            
+            if (query) {
+                results = movies.filter(m => 
+                    m.title.toLowerCase().includes(query) || 
+                    m.genre.some(g => g.toLowerCase().includes(query))
+                );
+            }
+            
+            if (currentFilter !== 'all') {
+                results = results.filter(m => m.genre.includes(currentFilter));
+            }
+            
+            displaySearchResults(results);
+        }
+
+        function filterMovies(genre) {
+            currentFilter = genre;
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            searchMovies();
+        }
+
+        function displaySearchResults(results) {
+            let html = '';
+            results.slice(0, 20).forEach(movie => {
+                html += `
+                    <div class="search-item" onclick="showMovieDetail(${movie.id})">
+                        <img src="${movie.poster}" alt="${movie.title}">
+                        <div class="title">${movie.title}</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">${movie.year} • ⭐ ${movie.rating}</div>
+                    </div>
+                `;
+            });
+            document.getElementById('search-results').innerHTML = html || '<p style="text-align: center; color: var(--text-secondary);">No movies found</p>';
+        }
+
+        // ==================== LIVE TV ====================
+        function loadLiveTV() {
+            let html = '';
+            liveChannels.forEach(channel => {
+                html += `
+                    <div class="channel-card" onclick="playLiveChannel('${channel.streamUrl}', '${channel.name}')">
+                        <div class="channel-logo">${channel.logo}</div>
+                        <div class="channel-name">${channel.name}</div>
+                        <div style="color: var(--text-secondary); margin-bottom: 5px;">${channel.category}</div>
+                        <span class="live-badge">🔴 LIVE</span>
+                    </div>
+                `;
+            });
+            document.getElementById('channels-grid').innerHTML = html;
+        }
+
+        // ==================== AI CHAT ====================
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            // Add user message
+            chatHistory.push({ role: 'user', content: message, time: new Date().toISOString() });
+            updateChatDisplay();
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            try {
+                // Call your AI API
+                const response = await fetch(`https://api.yupra.my.id/api/ai/gpt5?text=${encodeURIComponent(message)}`);
+                const data = await response.json();
+                
+                // Remove typing indicator
+                removeTypingIndicator();
+                
+                // Add AI response
+                const aiResponse = data.response || data.message || data.text || "I'm here to help you find movies!";
+                chatHistory.push({ role: 'ai', content: aiResponse, time: new Date().toISOString() });
+                
+                // Save to localStorage
+                localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+                
+                updateChatDisplay();
+            } catch (error) {
+                removeTypingIndicator();
+                
+                // Fallback responses
+                const fallbackResponses = [
+                    "You can find all latest movies in the Home section!",
+                    "Fast & Furious 10 is trending now. Check it out!",
+                    "We have 50+ movies available for streaming.",
+                    "Use the search to find your favorite movies.",
+                    "Download movies directly from Google Drive links.",
+                    "Live TV channels are available 24/7."
+                ];
+                const fallback = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+                
+                chatHistory.push({ role: 'ai', content: fallback, time: new Date().toISOString() });
+                localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+                updateChatDisplay();
+            }
+        }
+
+        function showTypingIndicator() {
+            const chatContainer = document.getElementById('chat-messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typing-indicator';
+            typingDiv.className = 'typing-indicator';
+            typingDiv.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typing = document.getElementById('typing-indicator');
+            if (typing) typing.remove();
+        }
+
+        function loadChatHistory() {
+            updateChatDisplay();
+        }
+
+        function updateChatDisplay() {
+            let html = '';
+            chatHistory.forEach(msg => {
+                html += `
+                    <div class="chat-message ${msg.role === 'user' ? 'user-message' : 'ai-message'}">
+                        ${msg.content}
+                        <div style="font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 5px;">
+                            ${new Date(msg.time).toLocaleTimeString()}
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('chat-messages').innerHTML = html;
+            document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+        }
+
+        // ==================== PROFILE ====================
+        function upgradePremium() {
+            alert('Premium feature coming soon! You can still enjoy 50+ movies for free.');
+        }
+
+        function clearCache() {
+            localStorage.clear();
+            chatHistory = [];
+            alert('Cache cleared successfully!');
+        }
+
+        // Initialize
+        window.onload = () => {
+            localStorage.setItem('deviceId', deviceId);
+            document.getElementById('total-movies').textContent = movies.length;
+            document.getElementById('total-channels').textContent = liveChannels.length;
+            showPage('home');
+        };
+    </script>
+</body>
+</html>
