@@ -1,36 +1,28 @@
 {
-  "name": "sila-movies-app",
-  "version": "1.0.0",
-  "description": "SILA MOVIES - Premium Movie Streaming App 2026",
-  "main": "index.html",
+  "name": "sila-movies-backend",
+  "version": "2.0.0",
+  "description": "SILA MOVIES - Full Stack App with Supabase",
+  "main": "index.js",
   "scripts": {
-    "start": "npx http-server -p 3000",
-    "dev": "npx live-server --port=3000",
-    "build": "echo 'No build needed'",
-    "deploy": "gh-pages -d ."
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "serve-frontend": "npx http-server -p 3000"
   },
-  "keywords": [
-    "movies",
-    "streaming",
-    "netflix-clone",
-    "sila-movies",
-    "react",
-    "expo"
-  ],
+  "keywords": ["movies", "streaming", "supabase", "admin-panel"],
   "author": "Sawa Rich",
   "license": "MIT",
   "dependencies": {
-    "axios": "^1.6.2",
-    "localstorage-polyfill": "^1.0.1"
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "@supabase/supabase-js": "^2.38.4",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "axios": "^1.6.2"
   },
   "devDependencies": {
-    "http-server": "^14.1.1",
-    "live-server": "^1.2.2",
-    "gh-pages": "^6.1.0"
-  },
-  "homepage": "https://sila-movies.netlify.app",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sawarich/sila-movies"
+    "nodemon": "^3.0.2",
+    "http-server": "^14.1.1"
   }
 }
